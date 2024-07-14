@@ -12,7 +12,7 @@ public class StudentMarks
 {
     public static void main(String[] args) 
     {
-        int noStudents = 5;
+        int noStudents = 30;
         float[] marks = new float[noStudents];
         Scanner scanner = new Scanner(System.in);
         
@@ -36,11 +36,26 @@ public class StudentMarks
             scanner.nextLine(); // Consume the newline character
         }
         
+        float highMark = marks[0];
+        float lowMark = marks[0];
+
+        for (int i = 1; i < noStudents; i++) {
+            if (marks[i] > highMark) {
+                highMark = marks[i];
+            }
+            if (marks[i] < lowMark) {
+                lowMark = marks[i];
+            }
+        }
+        
         
         System.out.println("Assighnment: "+assigName);
         for(int j=0; j<noStudents; j++)
         {
             System.out.println(marks[j]);
         }
+        
+        System.out.println("Highest mark: " + highMark);
+        System.out.println("Lowest mark: " + lowMark);
     }
 }
