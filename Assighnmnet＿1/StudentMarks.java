@@ -48,14 +48,34 @@ public class StudentMarks
             }
         }
         
-        
         System.out.println("Assighnment: "+assigName);
         for(int j=0; j<noStudents; j++)
         {
-            System.out.println(marks[j]);
-        }
+        System.out.println(marks[j]);
         
-        System.out.println("Highest mark: " + highMark);
-        System.out.println("Lowest mark: " + lowMark);
+    }
+    System.out.println("Highest mark: " + highMark);
+    System.out.println("Lowest mark: " + lowMark);
+    
+    float sum = 0;
+        for (int i = 0; i < noStudents; i++) {
+            sum += marks[i];
+        }
+        float mean = sum / noStudents;
+
+        // Calculate standard deviation
+        float sumOfSquares = 0;
+        for (int i = 0; i < noStudents; i++) {
+            float deviation = marks[i] - mean;
+            sumOfSquares += deviation * deviation;
+        }
+        float variance = sumOfSquares / noStudents;
+        float stndDev = (float) Math.sqrt(variance);
+
+        // Print mean and standard deviation
+        System.out.println("Mean: " + mean);
+        System.out.println("Standard Deviation: " + stndDev);
     }
 }
+
+
