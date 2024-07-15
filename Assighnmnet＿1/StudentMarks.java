@@ -20,10 +20,11 @@ public class StudentMarks {
         String assigName = scanner.nextLine();
         
         System.out.println("Marks");
-        
+        //Enter marks
         for (int i = 0; i < noStudents; i++) {
             boolean validInput = false;
             while (!validInput) {
+                //To get error message if the input is not a number
                 try {
                     System.out.print("Enter mark for student " + (i + 1) + ": ");
                     float input = scanner.nextFloat();
@@ -36,7 +37,7 @@ public class StudentMarks {
                         System.out.println("Please enter marks again, marks should be between 0 and 30");
                     }
                 } catch (InputMismatchException e) {
-                    System.out.println("Invalid input. Please enter a numeric value.");
+                    System.out.println("Only numbers allowed!!.");
                     scanner.next(); // Consume the invalid input
                 }
             }
@@ -61,8 +62,6 @@ public class StudentMarks {
         for (int j = 0; j < noStudents; j++) {
             System.out.println("Student " + (j + 1) + " Mark: " + marks[j]);
         }
-        System.out.println("Highest mark: " + highMark);
-        System.out.println("Lowest mark: " + lowMark);
         
         // Calculate mean
         float sum = 0;
@@ -79,7 +78,9 @@ public class StudentMarks {
         }
         float variance = sumOfSquares / noStudents;
         float stndDev = (float) Math.sqrt(variance);
-
+        //Print highest and lowest marks
+        System.out.println("Highest mark: " + highMark);
+        System.out.println("Lowest mark: " + lowMark);
         // Print mean and standard deviation
         System.out.println("Mean: " + mean);
         System.out.println("Standard Deviation: " + stndDev);
