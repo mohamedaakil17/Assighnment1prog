@@ -7,35 +7,43 @@
  */
 
 import java.util.Scanner;
+import java.util.InputMismatchException;
 
-public class StudentMarks
-{
-    public static void main(String[] args) 
-    {
+public class StudentMarks {
+    public static void main(String[] args) {
         int noStudents = 30;
         float[] marks = new float[noStudents];
         Scanner scanner = new Scanner(System.in);
         
-        System.out.println("Assighnment");
-        //Enter Assighnment name
+        System.out.println("Assignment");
+        // Enter Assignment name
         String assigName = scanner.nextLine();
         
         System.out.println("Marks");
         
-        for(int i=0; i<noStudents; i++)
-        {
-            float input = scanner.nextFloat();
-            //Check for marks is between 0 and 30
-            if (input >= 0 && input <= 30)
-            {
-                marks[i] = input;
-            } else {
-                System.out.println("Please enter marks again, marks should be between 0 and 30");
-                i--; // to re-enter the mark for the same student
+        for (int i = 0; i < noStudents; i++) {
+            boolean validInput = false;
+            while (!validInput) {
+                try {
+                    System.out.print("Enter mark for student " + (i + 1) + ": ");
+                    float input = scanner.nextFloat();
+                    
+                    // Check if marks are between 0 and 30
+                    if (input >= 0 && input <= 30) {
+                        marks[i] = input;
+                        validInput = true;
+                    } else {
+                        System.out.println("Please enter marks again, marks should be between 0 and 30");
+                    }
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input. Please enter a numeric value.");
+                    scanner.next(); // Consume the invalid input
+                }
             }
             scanner.nextLine(); // Consume the newline character
         }
         
+        // Calculate highest and lowest marks
         float highMark = marks[0];
         float lowMark = marks[0];
 
@@ -48,16 +56,16 @@ public class StudentMarks
             }
         }
         
-        System.out.println("Assighnment: "+assigName);
-        for(int j=0; j<noStudents; j++)
-        {
-        System.out.println(marks[j]);
+        // Print assignment name and marks
+        System.out.println("Assignment: " + assigName);
+        for (int j = 0; j < noStudents; j++) {
+            System.out.println("Student " + (j + 1) + " Mark: " + marks[j]);
+        }
+        System.out.println("Highest mark: " + highMark);
+        System.out.println("Lowest mark: " + lowMark);
         
-    }
-    System.out.println("Highest mark: " + highMark);
-    System.out.println("Lowest mark: " + lowMark);
-    
-    float sum = 0;
+        // Calculate mean
+        float sum = 0;
         for (int i = 0; i < noStudents; i++) {
             sum += marks[i];
         }
@@ -77,5 +85,7 @@ public class StudentMarks
         System.out.println("Standard Deviation: " + stndDev);
     }
 }
+
+
 
 
