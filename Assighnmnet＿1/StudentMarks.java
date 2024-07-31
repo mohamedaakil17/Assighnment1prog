@@ -1,4 +1,3 @@
-
 /**
  * Write a description of class StudentMarks here.
  *
@@ -8,6 +7,8 @@
 
 import java.util.Scanner;
 import java.util.InputMismatchException;
+import java.io.File;
+import java.io.FileNotFoundException;
 
 public class StudentMarks {
     public static void main(String[] args) {
@@ -18,32 +19,24 @@ public class StudentMarks {
         System.out.println("Assignment");
         // Enter Assignment name
         String assigName = scanner.nextLine();
-        
-        System.out.println("Marks");
-        //Enter marks
-        for (int i = 0; i < noStudents; i++) {
-            boolean validInput = false;
-            while (!validInput) {
-                //To get error message if the input is not a number
-                try {
-                    System.out.print("Enter mark for student " + (i + 1) + ": ");
-                    float input = scanner.nextFloat();
-                    
-                    // Check if marks are between 0 and 30
-                    if (input >= 0 && input <= 30) {
-                        marks[i] = input;
-                        validInput = true;
-                    } else {
-                        System.out.println("Please enter marks again, marks should be between 0 and 30");
-                    }
-                } catch (InputMismatchException e) {
-                    System.out.println("Only numbers allowed!!.");
-                    scanner.next(); // Consume the invalid input
-                }
+
+        // Read marks from the file
+        try {
+            Scanner fileScanner = new Scanner(new File("/Users/muhammedaakil/Assighnmnet＿1/prog5001_students_grade_2022.txt"));
+            int i = 0;
+            while (fileScanner.hasNextFloat() && i < noStudents) {
+                marks[i] = fileScanner.nextFloat();
+                i++;
             }
-            scanner.nextLine(); // Consume the newline character
+            fileScanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("File not found.");
+            return;
+        } catch (InputMismatchException e) {
+            System.out.println("Invalid data format in file.");
+            return;
         }
-        
+
         // Calculate highest and lowest marks
         float highMark = marks[0];
         float lowMark = marks[0];
@@ -78,7 +71,8 @@ public class StudentMarks {
         }
         float variance = sumOfSquares / noStudents;
         float stndDev = (float) Math.sqrt(variance);
-        //Print highest and lowest marks
+
+        // Print highest and lowest marks
         System.out.println("Highest mark: " + highMark);
         System.out.println("Lowest mark: " + lowMark);
         // Print mean and standard deviation
@@ -86,7 +80,3 @@ public class StudentMarks {
         System.out.println("Standard Deviation: " + stndDev);
     }
 }
-
-
-
-
