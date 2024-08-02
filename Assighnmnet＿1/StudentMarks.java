@@ -22,6 +22,7 @@ public class StudentMarks {
         ArrayList<String> studentNames = new ArrayList<>();
         ArrayList<Integer> studentIDs = new ArrayList<>();
         ArrayList<float[]> studentMarks = new ArrayList<>();
+        ArrayList<Float> totalMarksList = new ArrayList<>();
 
         // Read data from the file
         try {
@@ -59,7 +60,10 @@ public class StudentMarks {
 
                     studentNames.add(studentName);
                     studentIDs.add(studentID);
-                    studentMarks.add(new float[] { assignment1, assignment2, assignment3 });
+                    float[] marks = new float[] { assignment1, assignment2, assignment3 };
+                    studentMarks.add(marks);
+                    float totalMarks = assignment1 + assignment2 + assignment3;
+                    totalMarksList.add(totalMarks);
                 }
             }
             fileScanner.close();
@@ -82,35 +86,32 @@ public class StudentMarks {
         float lowMark = 101;
         float totalMarks = 0;
 
-        for (float[] marks : studentMarks) {
-            for (float mark : marks) {
-                if (mark > highMark) {
-                    highMark = mark;
-                }
-                if (mark < lowMark) {
-                    lowMark = mark;
-                }
-                totalMarks += mark;
+        for (float total : totalMarksList) {
+            if (total > highMark) {
+                highMark = total;
             }
+            if (total < lowMark) {
+                lowMark = total;
+            }
+            totalMarks += total;
         }
 
-        float mean = totalMarks / (noStudents * 3);
+        float mean = totalMarks / noStudents;
 
         float sumOfSquares = 0;
-        for (float[] marks : studentMarks) {
-            for (float mark : marks) {
-                float deviation = mark - mean;
-                sumOfSquares += deviation * deviation;
-            }
+        for (float total : totalMarksList) {
+            float deviation = total - mean;
+            sumOfSquares += deviation * deviation;
         }
-        float variance = sumOfSquares / (noStudents * 3);
+        float variance = sumOfSquares / noStudents;
         float stndDev = (float) Math.sqrt(variance);
 
         // Print unit name and student data
         System.out.println("Unit Name: " + unitName);
         for (int i = 0; i < noStudents; i++) {
             System.out.println("Student Name: " + studentNames.get(i) + ", Student ID: " + studentIDs.get(i) + 
-                               ", Marks: " + studentMarks.get(i)[0] + ", " + studentMarks.get(i)[1] + ", " + studentMarks.get(i)[2]);
+                               ", Marks: " + studentMarks.get(i)[0] + ", " + studentMarks.get(i)[1] + ", " + studentMarks.get(i)[2] + 
+                               ", Total Mark: " + totalMarksList.get(i));
         }
 
         // Print highest and lowest marks
