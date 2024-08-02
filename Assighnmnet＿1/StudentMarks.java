@@ -1,76 +1,117 @@
 /**
  * Write a description of class StudentMarks here.
- *
- * @author (your name)
- * @version (a version number or a date)
+ * 
+ * @author
+ * @version
  */
 
 import java.util.Scanner;
 import java.util.InputMismatchException;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 public class StudentMarks {
     public static void main(String[] args) {
-        int noStudents = 30;
-        float[] marks = new float[noStudents];
         Scanner scanner = new Scanner(System.in);
-        
-        System.out.println("Assignment");
-        // Enter Assignment name
-        String assigName = scanner.nextLine();
 
-        // Read marks from the file
+        System.out.println("Enter the file name:");
+        String fileName = scanner.nextLine();
+
+        String unitName = "";
+        ArrayList<String> studentNames = new ArrayList<>();
+        ArrayList<Integer> studentIDs = new ArrayList<>();
+        ArrayList<float[]> studentMarks = new ArrayList<>();
+
+        // Read data from the file
         try {
             Scanner fileScanner = new Scanner(new File("/Users/muhammedaakil/Assighnmnet＿1/prog5001_students_grade_2022.txt"));
-            int i = 0;
-            while (fileScanner.hasNextFloat() && i < noStudents) {
-                marks[i] = fileScanner.nextFloat();
-                i++;
+            boolean unitNameRead = false;
+
+            while (fileScanner.hasNextLine()) {
+                String line = fileScanner.nextLine().trim();
+
+                // Ignore comment lines
+                if (line.startsWith("#")) {
+                    continue;
+                }
+
+                // Read unit name
+                if (!unitNameRead && line.startsWith("Unit")) {
+                    unitName = line.split(",")[1].trim();
+                    unitNameRead = true;
+                    continue;
+                }
+
+                // Skip header line
+                if (line.startsWith("Last Name")) {
+                    continue;
+                }
+
+                // Read student data
+                String[] parts = line.split(",");
+                if (parts.length == 6) {
+                    String studentName = parts[1].trim() + " " + parts[0].trim();
+                    int studentID = Integer.parseInt(parts[2].trim());
+                    float assignment1 = parts[3].isEmpty() ? 0 : Float.parseFloat(parts[3].trim());
+                    float assignment2 = parts[4].isEmpty() ? 0 : Float.parseFloat(parts[4].trim());
+                    float assignment3 = parts[5].isEmpty() ? 0 : Float.parseFloat(parts[5].trim());
+
+                    studentNames.add(studentName);
+                    studentIDs.add(studentID);
+                    studentMarks.add(new float[] { assignment1, assignment2, assignment3 });
+                }
             }
             fileScanner.close();
         } catch (FileNotFoundException e) {
             System.out.println("File not found.");
             return;
-        } catch (InputMismatchException e) {
+        } catch (InputMismatchException | NumberFormatException e) {
             System.out.println("Invalid data format in file.");
             return;
         }
 
-        // Calculate highest and lowest marks
-        float highMark = marks[0];
-        float lowMark = marks[0];
+        // Calculate statistics
+        int noStudents = studentMarks.size();
+        if (noStudents == 0) {
+            System.out.println("No student marks found.");
+            return;
+        }
 
-        for (int i = 1; i < noStudents; i++) {
-            if (marks[i] > highMark) {
-                highMark = marks[i];
-            }
-            if (marks[i] < lowMark) {
-                lowMark = marks[i];
-            }
-        }
-        
-        // Print assignment name and marks
-        System.out.println("Assignment: " + assigName);
-        for (int j = 0; j < noStudents; j++) {
-            System.out.println("Student " + (j + 1) + " Mark: " + marks[j]);
-        }
-        
-        // Calculate mean
-        float sum = 0;
-        for (int i = 0; i < noStudents; i++) {
-            sum += marks[i];
-        }
-        float mean = sum / noStudents;
+        float highMark = -1;
+        float lowMark = 101;
+        float totalMarks = 0;
 
-        // Calculate standard deviation
+        for (float[] marks : studentMarks) {
+            for (float mark : marks) {
+                if (mark > highMark) {
+                    highMark = mark;
+                }
+                if (mark < lowMark) {
+                    lowMark = mark;
+                }
+                totalMarks += mark;
+            }
+        }
+
+        float mean = totalMarks / (noStudents * 3);
+
         float sumOfSquares = 0;
-        for (int i = 0; i < noStudents; i++) {
-            float deviation = marks[i] - mean;
-            sumOfSquares += deviation * deviation;
+        for (float[] marks : studentMarks) {
+            for (float mark : marks) {
+                float deviation = mark - mean;
+                sumOfSquares += deviation * deviation;
+            }
         }
-        float variance = sumOfSquares / noStudents;
+        float variance = sumOfSquares / (noStudents * 3);
         float stndDev = (float) Math.sqrt(variance);
+
+        // Print unit name and student data
+        System.out.println("Unit Name: " + unitName);
+        for (int i = 0; i < noStudents; i++) {
+            System.out.println("Student Name: " + studentNames.get(i) + ", Student ID: " + studentIDs.get(i) + 
+                               ", Marks: " + studentMarks.get(i)[0] + ", " + studentMarks.get(i)[1] + ", " + studentMarks.get(i)[2]);
+        }
 
         // Print highest and lowest marks
         System.out.println("Highest mark: " + highMark);
