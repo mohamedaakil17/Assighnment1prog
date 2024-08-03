@@ -1,10 +1,3 @@
-/**
- * Write a description of class StudentMarks here.
- * 
- * @author
- * @version
- */
-
 import java.util.Scanner;
 import java.util.InputMismatchException;
 import java.io.File;
@@ -120,5 +113,18 @@ public class StudentMarks {
         // Print mean and standard deviation
         System.out.println("Mean: " + mean);
         System.out.println("Standard Deviation: " + stndDev);
+
+        // Step 1: Get threshold from user
+        System.out.println("Enter the threshold:");
+        float threshold = scanner.nextFloat();
+
+        // Step 2: Print students with total marks less than threshold
+        System.out.println("Students with total marks less than " + threshold + ":");
+        for (int i = 0; i < noStudents; i++) {
+            if (totalMarksList.get(i) < threshold) {
+                System.out.println("Student Name: " + studentNames.get(i) + ", Student ID: " + studentIDs.get(i) + 
+                                   ", Total Mark: " + totalMarksList.get(i));
+            }
+        }
     }
 }
