@@ -8,8 +8,21 @@ public class StudentMarks {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Enter the file name:");
-        String fileName = scanner.nextLine();
+        String fileName = "/Users/muhammedaakil/Assighnmnet＿1/prog5001_students_grade_2022.txt";
+        boolean validFile = false;
+
+        while (!validFile) {
+            System.out.println("Enter the file name:");
+            fileName = scanner.nextLine();
+
+            try {
+                Scanner fileScanner = new Scanner(new File(fileName));
+                validFile = true;  // If no exception, file is valid
+                fileScanner.close();  // Close immediately after checking validity
+            } catch (FileNotFoundException e) {
+                System.out.println("File not found. Please enter a valid file name.");
+            }
+        }
 
         String unitName = "";
         ArrayList<String> studentNames = new ArrayList<>();
@@ -19,7 +32,7 @@ public class StudentMarks {
 
         // Read data from the file
         try {
-            Scanner fileScanner = new Scanner(new File("/Users/muhammedaakil/Assighnmnet＿1/prog5001_students_grade_2022.txt"));
+            Scanner fileScanner = new Scanner(new File(fileName));
             boolean unitNameRead = false;
 
             while (fileScanner.hasNextLine()) {
@@ -114,9 +127,22 @@ public class StudentMarks {
         System.out.println("Mean: " + mean);
         System.out.println("Standard Deviation: " + stndDev);
 
-        // Step 1: Get threshold from user
-        System.out.println("Enter the threshold:");
-        float threshold = scanner.nextFloat();
+        // Step 1: Get threshold from user with error handling
+        float threshold = -1;
+        while (true) {
+            System.out.println("Enter the threshold:");
+            try {
+                threshold = scanner.nextFloat();
+                if (threshold < 0) {
+                    System.out.println("Threshold must be non-negative. Please try again.");
+                } else {
+                    break;
+                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
+                scanner.next(); // Consume the invalid input
+            }
+        }
 
         // Step 2: Print students with total marks less than threshold
         System.out.println("Students with total marks less than " + threshold + ":");
