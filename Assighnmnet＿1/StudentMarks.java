@@ -8,7 +8,7 @@ public class StudentMarks {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        String fileName = "/Users/muhammedaakil/Assighnmnet＿1/prog5001_students_grade_2022.txt";
+        String fileName = "";
         boolean validFile = false;
 
         while (!validFile) {
@@ -88,44 +88,46 @@ public class StudentMarks {
             return;
         }
 
-        float highMark = -1;
-        float lowMark = 101;
-        float totalMarks = 0;
+        // Sort students by total marks using bubble sort
+        for (int i = 0; i < noStudents - 1; i++) {
+            for (int j = 0; j < noStudents - i - 1; j++) {
+                if (totalMarksList.get(j) > totalMarksList.get(j + 1)) {
+                    // Swap total marks
+                    float tempMark = totalMarksList.get(j);
+                    totalMarksList.set(j, totalMarksList.get(j + 1));
+                    totalMarksList.set(j + 1, tempMark);
 
-        for (float total : totalMarksList) {
-            if (total > highMark) {
-                highMark = total;
+                    // Swap student names
+                    String tempName = studentNames.get(j);
+                    studentNames.set(j, studentNames.get(j + 1));
+                    studentNames.set(j + 1, tempName);
+
+                    // Swap student IDs
+                    int tempID = studentIDs.get(j);
+                    studentIDs.set(j, studentIDs.get(j + 1));
+                    studentIDs.set(j + 1, tempID);
+
+                    // Swap student marks
+                    float[] tempMarks = studentMarks.get(j);
+                    studentMarks.set(j, studentMarks.get(j + 1));
+                    studentMarks.set(j + 1, tempMarks);
+                }
             }
-            if (total < lowMark) {
-                lowMark = total;
-            }
-            totalMarks += total;
         }
 
-        float mean = totalMarks / noStudents;
-
-        float sumOfSquares = 0;
-        for (float total : totalMarksList) {
-            float deviation = total - mean;
-            sumOfSquares += deviation * deviation;
-        }
-        float variance = sumOfSquares / noStudents;
-        float stndDev = (float) Math.sqrt(variance);
-
-        // Print unit name and student data
-        System.out.println("Unit Name: " + unitName);
-        for (int i = 0; i < noStudents; i++) {
+        // Print top 5 students with lowest total marks
+        System.out.println("Top 5 Students with Lowest Total Marks:");
+        for (int i = 0; i < Math.min(5, noStudents); i++) {
             System.out.println("Student Name: " + studentNames.get(i) + ", Student ID: " + studentIDs.get(i) + 
-                               ", Marks: " + studentMarks.get(i)[0] + ", " + studentMarks.get(i)[1] + ", " + studentMarks.get(i)[2] + 
                                ", Total Mark: " + totalMarksList.get(i));
         }
 
-        // Print highest and lowest marks
-        System.out.println("Highest mark: " + highMark);
-        System.out.println("Lowest mark: " + lowMark);
-        // Print mean and standard deviation
-        System.out.println("Mean: " + mean);
-        System.out.println("Standard Deviation: " + stndDev);
+        // Print top 5 students with highest total marks
+        System.out.println("Top 5 Students with Highest Total Marks:");
+        for (int i = noStudents - 1; i >= Math.max(0, noStudents - 5); i--) {
+            System.out.println("Student Name: " + studentNames.get(i) + ", Student ID: " + studentIDs.get(i) + 
+                               ", Total Mark: " + totalMarksList.get(i));
+        }
 
         // Step 1: Get threshold from user with error handling
         float threshold = -1;
