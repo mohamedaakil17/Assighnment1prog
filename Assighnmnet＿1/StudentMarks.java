@@ -89,14 +89,19 @@ public class StudentMarks {
 
         float highMark = -1;
         float lowMark = 101;
+        int highMarkIndex = -1;
+        int lowMarkIndex = -1;
         float totalMarks = 0;
 
-        for (float total : totalMarksList) {
+        for (int i = 0; i < totalMarksList.size(); i++) {
+            float total = totalMarksList.get(i);
             if (total > highMark) {
                 highMark = total;
+                highMarkIndex = i;
             }
             if (total < lowMark) {
                 lowMark = total;
+                lowMarkIndex = i;
             }
             totalMarks += total;
         }
@@ -137,8 +142,8 @@ public class StudentMarks {
                     break;
                 case 2:
                     // Display highest and lowest marks
-                    System.out.println("Highest mark: " + highMark);
-                    System.out.println("Lowest mark: " + lowMark);
+                    System.out.println("Highest mark: " + highMark + " (Student Name: " + studentNames.get(highMarkIndex) + ", Student ID: " + studentIDs.get(highMarkIndex) + ")");
+                    System.out.println("Lowest mark: " + lowMark + " (Student Name: " + studentNames.get(lowMarkIndex) + ", Student ID: " + studentIDs.get(lowMarkIndex) + ")");
                     break;
                 case 3:
                     // Display mean and standard deviation
@@ -148,17 +153,27 @@ public class StudentMarks {
                 case 4:
                     // Display top 5 students with highest total marks
                     System.out.println("Top 5 Students with Highest Total Marks:");
-                    for (int i = noStudents - 1; i >= Math.max(0, noStudents - 5); i--) {
-                        System.out.println("Student Name: " + studentNames.get(i) + ", Student ID: " + studentIDs.get(i) + 
-                                           ", Total Mark: " + totalMarksList.get(i));
+                    ArrayList<Integer> highestIndices = new ArrayList<>();
+                    for (int i = 0; i < noStudents; i++) {
+                        highestIndices.add(i);
+                    }
+                    highestIndices.sort((a, b) -> Float.compare(totalMarksList.get(b), totalMarksList.get(a)));
+                    for (int i = 0; i < Math.min(5, noStudents); i++) {
+                        int index = highestIndices.get(i);
+                        System.out.println("Student Name: " + studentNames.get(index) + ", Student ID: " + studentIDs.get(index) + ", Total Mark: " + totalMarksList.get(index));
                     }
                     break;
                 case 5:
                     // Display top 5 students with lowest total marks
                     System.out.println("Top 5 Students with Lowest Total Marks:");
+                    ArrayList<Integer> lowestIndices = new ArrayList<>();
+                    for (int i = 0; i < noStudents; i++) {
+                        lowestIndices.add(i);
+                    }
+                    lowestIndices.sort((a, b) -> Float.compare(totalMarksList.get(a), totalMarksList.get(b)));
                     for (int i = 0; i < Math.min(5, noStudents); i++) {
-                        System.out.println("Student Name: " + studentNames.get(i) + ", Student ID: " + studentIDs.get(i) + 
-                                           ", Total Mark: " + totalMarksList.get(i));
+                        int index = lowestIndices.get(i);
+                        System.out.println("Student Name: " + studentNames.get(index) + ", Student ID: " + studentIDs.get(index) + ", Total Mark: " + totalMarksList.get(index));
                     }
                     break;
                 case 6:
@@ -182,8 +197,7 @@ public class StudentMarks {
                     System.out.println("Students with total marks less than " + threshold + ":");
                     for (int i = 0; i < noStudents; i++) {
                         if (totalMarksList.get(i) < threshold) {
-                            System.out.println("Student Name: " + studentNames.get(i) + ", Student ID: " + studentIDs.get(i) + 
-                                               ", Total Mark: " + totalMarksList.get(i));
+                            System.out.println("Student Name: " + studentNames.get(i) + ", Student ID: " + studentIDs.get(i) + ", Total Mark: " + totalMarksList.get(i));
                         }
                     }
                     break;
